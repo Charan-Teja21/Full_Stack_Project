@@ -1,0 +1,17 @@
+.img11{
+    max-height: 200px;
+    width: 80%;
+    padding: 10px;
+}
+.img22{
+    max-width: 500px;
+    min-width:auto;
+}
+.col {
+    border: 1.7px solid rgb(204, 204, 252);
+    background-color:rgb(255, 255, 255);
+  }
+  
+  .col:hover {
+    border: 1.7px solid black;
+  }

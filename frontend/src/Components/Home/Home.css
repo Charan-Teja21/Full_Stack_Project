@@ -1,0 +1,31 @@
+.cardImg {
+    border: none;
+    height: 210px;
+  }
+  
+  .product_image {
+    height: 210px;
+    width: fit-content;
+    max-width: 100%;
+  }
+  
+  .cd {
+    border: 1.7px solid rgb(204, 204, 252);
+  }
+
+  .card {
+    border: none;
+  }
+  
+  
+  .Favourite .row {
+    justify-content: space-around; /* Ensure the space is distributed evenly */
+  }
+  
+  @media (min-width: 992px) {
+    .Favourite .col-lg-4 {
+      max-width: 30%; /* Adjust to make sure three cards fit nicely in a row */
+      flex: 0 0 30%;
+    }
+  }
+  
