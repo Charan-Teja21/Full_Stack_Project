@@ -5,6 +5,11 @@ import { FaRegStarHalfStroke } from 'react-icons/fa6';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify'; // Import toast
+import 'react-toastify/dist/ReactToastify.css'; // Import Toastify styles
+
+// Ensure you call toast.configure() somewhere in your app, usually in App.js
+//toast.configure();
 
 function Fooditem() {
     let { state } = useLocation();
@@ -14,9 +19,10 @@ function Fooditem() {
     const [reviews, setReviews] = useState([]);
     const [newReview, setNewReview] = useState({ rating: 0, content: '' });
     const [reviewSubmitted, setReviewSubmitted] = useState(false);
+
     const fetchReviews = async () => {
         try {
-            let res = await axios.get(`http://localhost:5000/reviews/${state.title}`);
+            let res = await axios.get(`http://localhost:3500/reviews/${state.title}`);
             setReviews(res.data.payload);
         } catch (error) {
             console.error('Error fetching reviews:', error);
@@ -36,18 +42,20 @@ function Fooditem() {
     };
 
     async function handleSubmitQuantity() {
-        obj1.title = state.title;
-        obj1.quantity = Number(quantity);
-        obj1.image = state.image;
-        obj1.cost = state.cost;
+        let obj1 = {
+            title: state.title,
+            quantity: Number(quantity),
+            image: state.image,
+            cost: state.cost,
+        };
+
         try {
-            let res = await axios.put(`http://localhost:5000/cart/${currentUser.username}`, obj1);
-            alert('Successfully added to cart!');
-            console.log(res.data.message);
-            console.log(currentUser);
+            let res = await axios.put(`http://localhost:3500/cart/${currentUser.username}`, obj1);
+            toast.success('Successfully added to cart!'); // Replace alert with toast
             setShowDropdown(false);
         } catch (error) {
             console.error('Error adding to cart:', error);
+            toast.error('Error adding to cart. Please try again.'); // Error handling
         }
     };
 
@@ -62,12 +70,13 @@ function Fooditem() {
     async function handleReviewSubmit() {
         newReview.username = currentUser.username;
         try {
-            await axios.put(`http://localhost:5000/reviews/${state.title}`, newReview);
-            alert('Review submitted successfully!');
+            await axios.put(`http://localhost:3500/reviews/${state.title}`, newReview);
+            toast.success('Review submitted successfully!'); // Replace alert with toast
             setReviewSubmitted(!reviewSubmitted);  // Toggle the reviewSubmitted state
             setNewReview({ rating: 0, content: '' });
         } catch (error) {
             console.error('Error submitting review:', error);
+            toast.error('Error submitting review. Please try again.'); // Error handling
         }
     };
 
@@ -80,14 +89,14 @@ function Fooditem() {
                 <div className="col-sm-12 col-md-6 pt-3">
                     <h1 className="text-center display-1" style={{ fontSize: "2.5rem", fontWeight: "bolder" }}>{state.title.toUpperCase()}</h1>
                     <div className="d-flex align-items-center">
-                      <FaStar />
-                      <FaStar />
-                      <FaStar />
-                      <FaStar />
-                      <FaRegStarHalfStroke />
-                      <span style={{width:'15px'}}></span>
-                      {state.rating}
-                      </div>
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaRegStarHalfStroke />
+                        <span style={{ width: '15px' }}></span>
+                        {state.rating}
+                    </div>
                     <div className='row mt-2 text-center'>
                         <div className='col-6'>
                             <p className='display-6' style={{ borderRight: "1px solid black" }}>{state.foodType.toUpperCase()}</p>

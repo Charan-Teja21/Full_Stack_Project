@@ -5,11 +5,11 @@ import axios from "axios";
 // slices/userSlice.js
 export const userLoginThunk = createAsyncThunk("user-login", async (userCredObj, thunkApi) => {
   try {
-    const res = await axios.post("http://localhost:5000/login", userCredObj);
-    console.log(res);
+    const res = await axios.post("http://localhost:3500/login", userCredObj);
+    //console.log(res);
     if (res.data.message === "Login Success") {
       // Store token and user in localStorage
-      console.log('res.data.token')
+     // console.log('res.data.token')
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       return res.data;
@@ -17,7 +17,7 @@ export const userLoginThunk = createAsyncThunk("user-login", async (userCredObj,
       return thunkApi.rejectWithValue(res.data.message);
     }
   } catch (err) {
-    return thunkApi.rejectWithValue(err);
+    return thunkApi.rejectWithValue(err.message);
   }
 });
 

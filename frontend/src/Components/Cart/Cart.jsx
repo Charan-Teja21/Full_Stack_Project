@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import './Cart.css';
 import CartImage from '../../Images/Cart.webp'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Cart() {
   let [items, setItems] = useState([]);
@@ -12,12 +14,12 @@ function Cart() {
   let navigate = useNavigate();
 
   async function getCartItems() {
-    let res = await axios.get(`http://localhost:5000/cart/${currentUser.username}`);
+    let res = await axios.get(`http://localhost:3500/cart/${currentUser.username}`);
     setItems(res.data.payload);
   }
 
   async function handleQuantityChange(title, quantity) {
-    let res = await axios.put(`http://localhost:5000/quantity/${currentUser.username}`, { title, quantity });
+    let res = await axios.put(`http://localhost:3500/quantity/${currentUser.username}`, { title, quantity });
     if (res.data.success) {
       setItems(items.map(item => item.title === title ? { ...item, quantity } : item));
     }
@@ -48,7 +50,7 @@ function Cart() {
 
   const handlePayment = () => {
     // Implement the payment logic here
-    alert('Proceeding to payment...');
+    toast.success('Proceeding to payment'); // Replace alert with toast
     // Navigate to the payment page or trigger payment process
     navigate('/payment');
   };

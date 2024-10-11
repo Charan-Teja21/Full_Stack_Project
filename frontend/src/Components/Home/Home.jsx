@@ -12,7 +12,7 @@ function Home() {
   let [recipeObj, setRecipeObj] = useState({});
 
   async function getSpecialItem() {
-    let res = await axios.get(`http://localhost:5000/fooditem/${title}`);
+    let res = await axios.get(`http://localhost:3500/fooditem/${title}`);
     setRecipeObj(res.data.payload);
   }
 
@@ -21,7 +21,7 @@ function Home() {
   }
 
   const getAllRecipes = async () => {
-    let res = await axios.get('http://localhost:5000/fooditem');
+    let res = await axios.get('http://localhost:3500/fooditem');
     setRecipes(res.data.payload);
   }
 

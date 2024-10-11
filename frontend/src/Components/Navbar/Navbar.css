@@ -16,7 +16,7 @@ nav {
   align-items: center;
   background-color: #a94929;
   color: black;
-  position: sticky;
+  position: fixed;
   top: 0;
   width: 100%;
   z-index: 2000; /* Ensure nav bar is above other elements */

@@ -8,38 +8,45 @@ import Order from "../../Images/Orders.png";
 function UserDashboard() {
   let navigate = useNavigate();
   let [imge, setImge] = useState(false);
-  let [imgUrl, setImgUrl] = useState("");
+  let [imageFile, setImageFile] = useState(null);
   let { currentUser } = useSelector((state) => state.useruserLoginReducer);
   let [user, setUser] = useState(null);
 
+ // Handle image upload form submission
   async function handleForm(event) {
-    event.preventDefault();
-    if (!imgUrl) {
-      console.error("Image URL is required");
-      return;
-    }
-
-    try {
-      await axios.put(`/updateimage/${currentUser.username}`, { imgUrl });
-      setImge(false);
-      // Update the user image in the state
-      setUser((prevUser) => ({ ...prevUser, userImage: imgUrl }));
-    } catch (error) {
-      console.error("Error updating image:", error);
-    }
+  event.preventDefault();
+  if (!imageFile) {
+    console.error("Image file is required");
+    return;
   }
+
+  const formData = new FormData();
+  formData.append("userImage", imageFile);
+
+  try {
+    // Upload image to backend
+    let response = await axios.put(`/updateimage/${currentUser.username}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    setImge(false);
+    setUser(response.data.payload);
+  } catch (error) {
+    console.error("Error updating image:", error);
+  }
+}
+
   async function handleCard(title){
-    let res = await axios.get(`http://localhost:5000/fooditem/${title}`);
+    let res = await axios.get(`http://localhost:3500/fooditem/${title}`);
     navigate(`/fooditem/${res.data.payload.recipeid}`,{state:res.data.payload});
   }
 
   async function getUser() {
     try {
       let res = await axios.get(
-        `http://localhost:5000/replicateuser/${currentUser.username}`
+        `http://localhost:3500/replicateuser/${currentUser.username}`
       );
       setUser(res.data.payload);
-      console.log(user);
+      //console.log(user);
     } catch (error) {
       console.error("Error fetching user:", error);
     }
@@ -47,7 +54,7 @@ function UserDashboard() {
   
   function handleImage() {
     setImge(true);
-    console.log(imge);
+   // console.log(imge);
   }
 
   useEffect(() => {
@@ -99,10 +106,7 @@ function UserDashboard() {
                 />
                 {imge === false ? (
                   <>
-                    <button
-                      className="btn rounded bg-primary w-50 m-2"
-                      onClick={handleImage}
-                    >
+                    <button className="btn rounded bg-primary w-50 m-2" onClick={handleImage}>
                       ADD IMAGE
                     </button>
                   </>
@@ -110,18 +114,16 @@ function UserDashboard() {
                   <>
                     <form onSubmit={handleForm}>
                       <div>
-                        <label htmlFor="ImgUrl">Image</label>
-                        <input
-                          type="url"
-                          name="ImgUrl"
-                          className="form-control"
-                          id="ImgUrl"
-                          value={imgUrl}
-                          onChange={(e) => setImgUrl(e.target.value)}
-                          placeholder="Image Url"
-                          required
-                        />
-                      </div>
+                      <label htmlFor="ImgFile">Upload Image</label>
+                      <input
+                        type="file"
+                        name="ImgFile"
+                        className="form-control"
+                        id="ImgFile"
+                        onChange={(e) => setImageFile(e.target.files[0])}
+                        required
+                      />
+                    </div>
                       <button className="btn rounded bg-primary">ADD</button>
                     </form>
                   </>

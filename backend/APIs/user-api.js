@@ -5,6 +5,9 @@ const bcryptjs = require("bcryptjs");
 const expressAsyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const verifyToken = require("../middlewares/verifyToken")
+const multer = require("multer");
+const { cloudinary, storage } = require("../utils/cloudinary");
+const upload = multer({ storage });
 require('dotenv').config();
 
 //get userscollection 
@@ -19,7 +22,7 @@ userApp.use((req, res, next) => {
 let foodcollection;
 userApp.use((req, res, next) => {
   foodcollection = req.app.get("foodCollection");
-  console.log(foodcollection);
+  //console.log(foodcollection);
   next();
 })
 
@@ -52,7 +55,7 @@ userApp.post('/user', expressAsyncHandler(async (req, res) => {
     obj.orders=[];
     obj.cart=[];
     obj.userImage=null;
-    console.log(obj);
+    //console.log(obj);
     await replicatecollection.insertOne(obj);
     //console.log()
     res.send({ message: "User Created" });
@@ -84,7 +87,7 @@ userApp.post("/login", expressAsyncHandler(async (req, res) => {
 // get all food products
 userApp.get('/fooditem', expressAsyncHandler(async (req, res) => {
   const foodList = await foodcollection.find().toArray()
-  console.log(foodList);
+  //console.log(foodList);
   // send res
   res.send({ message: "FoodList", payload: foodList })
 }))
@@ -104,7 +107,7 @@ userApp.put('/paymentSuccess/:username', expressAsyncHandler(async (req, res) =>
   const iobj={}
   iobj.date = new Date().toLocaleString();
   iobj.order = prodObj;
-  console.log(iobj);
+  //console.log(iobj);
   //Update the order to the user
   // for(const obj of prodObj){
     await replicatecollection.updateOne({ username: user }, { $push: { orders: iobj } });
@@ -152,7 +155,7 @@ userApp.put('/cart/:username', expressAsyncHandler(async (req, res) => {
 //delete a product from cart
 userApp.put('/deleteproduct/:username',expressAsyncHandler(async(req,res)=>{
   const cartObj=req.body;
-  console.log(cartObj);
+  //console.log(cartObj);
   const user=req.params.username;
   await replicatecollection.updateMany({username:user},{$pull:{cart:{title:cartObj.title}}});
   res.send({message:'Deleted a product from cart'});
@@ -163,7 +166,7 @@ userApp.put('/deleteproduct/:username',expressAsyncHandler(async(req,res)=>{
 //increase or decrease the quantity
 userApp.put('/quantity/:username', expressAsyncHandler(async (req, res) => {
   const obj = req.body;
-  console.log(obj);
+  //console.log(obj);
   const user = req.params.username;
         await replicatecollection.updateOne({ username: user, 'cart.title': obj.title }, {$set:{'cart.$.quantity':obj.quantity}});
         res.send({message:'Quantity updated'});
@@ -198,16 +201,16 @@ userApp.get('/replicateuser/:username',expressAsyncHandler(async(req,res)=>{
 }))
 
 
-userApp.put('/updateimage/:username',expressAsyncHandler(async(req,res)=>{
-  // get user's username from url
-  const userName=req.params.username
-  // get user's image from body
-  const userImae=req.body
-  // update user's image
-  console.log(userImae);
-  const result=await replicatecollection.updateOne({username:userName},{$set:{userImage:userImae.imgUrl}})
-  res.send({message:"image updated"})
-  }))
+
+userApp.put("/updateimage/:username",upload.single("userImage"), // handle single image upload
+  expressAsyncHandler(async (req, res) => {
+    const { username } = req.params;
+    const imageUrl = req.file.path; // Cloudinary URL of uploaded image
+    // Update the user's profile image in the database
+    let updatedUser = await replicatecollection.findOneAndUpdate({ username },{ $set: { userImage: imageUrl } },{ returnOriginal: false });
+    res.status(200).send({ message: "Image updated successfully", payload: updatedUser });
+  })
+);
 
 //export user App
 module.exports = userApp;

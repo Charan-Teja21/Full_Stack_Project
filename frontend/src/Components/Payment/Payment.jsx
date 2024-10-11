@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './Payment.css';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Payment() {
   const navigate = useNavigate();
@@ -25,16 +27,16 @@ function Payment() {
     // For now, we simulate a successful payment
     try {
       let res = await axios.put(`/paymentSuccess/${currentUser.username}`, {});
-      console.log(res);
+      //console.log(res);
       if (res.data.message==='Payment Successful!') {
-        alert('Payment successful!');
+        toast.success('Payment Successful!'); // Replace alert with toast
         navigate('/userdashboard');
       } else {
-        alert('Payment failed, please try again.');
+        toast.error('Payment failed, please try again!');
       }
     } catch (error) {
       console.error('Error processing payment:', error);
-      alert('Error processing payment. Please try again later.');
+      toast.error('Error processing payment. Please try again later.');
     }
   };
 

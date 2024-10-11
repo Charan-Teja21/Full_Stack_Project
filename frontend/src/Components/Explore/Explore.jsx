@@ -7,7 +7,6 @@ import { FaStar } from "react-icons/fa";
 import { FaRegStarHalfStroke } from "react-icons/fa6";
 
 function Explore() {
-
   let [recipes, setRecipes] = useState([]);
   let [search, setSearch] = useState('');
   let { register, handleSubmit } = useForm()
@@ -17,12 +16,11 @@ function Explore() {
   }
 
   function readRecipeByRecipeId(recipeObj) {
-    // console.log(recipeObj)
     navigate(`/fooditem/${recipeObj.recipeid}`, { state: recipeObj});
   }
 
   const getAllRecipes = async () => {
-    let res = await axios.get('http://localhost:5000/fooditem')
+    let res = await axios.get('http://localhost:3500/fooditem')
     setRecipes(res.data.payload)
   }
 
@@ -78,7 +76,6 @@ function Explore() {
                       
                       <p>{recipe.description.substring(0, 80) + "..."}</p>
                     </div>
-                   
                   </div>
                 </div>
               )

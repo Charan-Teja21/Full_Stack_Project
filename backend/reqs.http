@@ -1,5 +1,5 @@
 # User register
-Post http://localhost:5000/user
+Post http://localhost:3500/user
 Content-Type: application/json
 
 {
@@ -126,7 +126,7 @@ Content-Type: application/json
 GET http://localhost:4000/deletedRecipes/ravi
 
 ### review by a user
-PUT http://localhost:5000/payment/ravi
+PUT http://localhost:3500/payment/ravi
 Content-Type: application/json
 
 {
@@ -135,25 +135,25 @@ Content-Type: application/json
 }
 
 ### get recipe from recipe id
-GET http://localhost:5000/register
+GET http://localhost:3500/register
 
 ###
-PUT http://localhost:5000/cart/ravi
+PUT http://localhost:3500/cart/ravi
 Content-Type: application/json
 
   {
     "title": "f"
   }
 ###
-GET http://localhost:5000/cart/ravi
+GET http://localhost:3500/cart/ravi
 
 ###
-PUT http://localhost:5000/paymentsuccess/ravi
+PUT http://localhost:3500/paymentsuccess/ravi
 ###
-GET http://localhost:5000/fooditem
+GET http://localhost:3500/fooditem
 
 ###
-PUT http://localhost:5000/deleteproduct/ravi
+PUT http://localhost:3500/deleteproduct/ravi
 Content-Type: application/json
 
 {
@@ -161,7 +161,7 @@ Content-Type: application/json
   "quantity": 1
 }
 ###
-PUT http://localhost:5000/quantity/ravi
+PUT http://localhost:3500/quantity/ravi
 Content-Type: application/json
 
 {
