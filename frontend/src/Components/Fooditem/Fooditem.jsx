@@ -12,26 +12,65 @@ import 'react-toastify/dist/ReactToastify.css'; // Import Toastify styles
 //toast.configure();
 
 function Fooditem() {
-    let { state } = useLocation();
+    //let { state } = useLocation();
+    const location = useLocation();
+    const currentPath = location.pathname; // This gives you the current path
+    const id = currentPath.split("/")[2];
+    //console.log(currentPath.split("/")[2])
     let { currentUser, loginUserStatus } = useSelector(state1 => state1.useruserLoginReducer);
     const [showDropdown, setShowDropdown] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const [reviews, setReviews] = useState([]);
     const [newReview, setNewReview] = useState({ rating: 0, content: '' });
     const [reviewSubmitted, setReviewSubmitted] = useState(false);
+    const [state, setState]=useState({})
 
-    const fetchReviews = async () => {
+    const [loading, setLoading] = useState(true);
+
+    const fetchFood = async () => {
+        setLoading(true);
         try {
-            let res = await axios.get(`http://localhost:3500/reviews/${state.title}`);
+            let res = await axios.get(`http://localhost:3500/foodite/${id}`);
+            console.log('API Response:', res.data.payload);
+            setState(res.data.payload);
+            if (res.data.payload.title) {
+                fetchReviews(res.data.payload.title);
+            }
+        } catch (error) {
+            console.error('Error fetching food item:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchReviews = async (title) => {
+        try {
+            let res = await axios.get(`http://localhost:3500/reviews/${title}`);
             setReviews(res.data.payload);
         } catch (error) {
             console.error('Error fetching reviews:', error);
         }
     };
 
+    // ✅ Always call hooks at the top level, never conditionally
     useEffect(() => {
-        fetchReviews();
+        console.log('Updated state:', state);
+    }, [state]);
+
+    useEffect(() => {
+        fetchFood();
+    }, [id]);
+
+    useEffect(() => {
+        if (state.title) {
+            fetchReviews(state.title); // ✅ pass title explicitly
+        }
     }, [state.title, reviewSubmitted]);
+
+    // ✅ Now it's safe to do conditional rendering
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
     const handleAddToCartClick = () => {
         setShowDropdown(true);
@@ -84,10 +123,10 @@ function Fooditem() {
         <div className='FoodItem container pt-2 pb-2'>
             <div className="row">
                 <div className="col-sm-12 d-flex col-md-6 p-2 align-items-center justify-content-center">
-                    <img src={state.image} style={{ width: "90%" }} alt="" />
+                    <img src={state?.image} style={{ width: "90%" }} alt="" />
                 </div>
                 <div className="col-sm-12 col-md-6 pt-3">
-                    <h1 className="text-center display-1" style={{ fontSize: "2.5rem", fontWeight: "bolder" }}>{state.title.toUpperCase()}</h1>
+                    <h1 className="text-center display-1" style={{ fontSize: "2.5rem", fontWeight: "bolder" }}>{state?.title?.toUpperCase()}</h1>
                     <div className="d-flex align-items-center">
                         <FaStar />
                         <FaStar />
@@ -95,20 +134,20 @@ function Fooditem() {
                         <FaStar />
                         <FaRegStarHalfStroke />
                         <span style={{ width: '15px' }}></span>
-                        {state.rating}
+                        {state?.rating}
                     </div>
                     <div className='row mt-2 text-center'>
                         <div className='col-6'>
-                            <p className='display-6' style={{ borderRight: "1px solid black" }}>{state.foodType.toUpperCase()}</p>
+                            <p className='display-6' style={{ borderRight: "1px solid black" }}>{state?.foodType?.toUpperCase()}</p>
                             <p>Food Type</p>
                         </div>
                         <div className='col-6'>
-                            <p className='display-6'>{state.restaurant.toUpperCase()}</p>
+                            <p className='display-6'>{state?.restaurant.toUpperCase()}</p>
                             <p>Restaurant</p>
                         </div>
                     </div>
                     <div className='mt-3 text-center'>
-                        <h3 className='display-6'>Cost: ₹{state.cost}</h3>
+                        <h3 className='display-6'>Cost: ₹{state?.cost}</h3>
                         {
                             (loginUserStatus === true) &&
                             <>
@@ -138,7 +177,7 @@ function Fooditem() {
             </div>
             <div className='w-100'>
                 <h2 className='pt-2'>DESCRIPTION</h2>
-                <p style={{ textAlign: 'justify' }}>{state.description}</p>
+                <p style={{ textAlign: 'justify' }}>{state?.description}</p>
             </div>
             <div className='w-100'>
                 <h2 className='pt-2'>REVIEWS</h2>
@@ -188,6 +227,9 @@ function Fooditem() {
                 )}
             </div>
         </div>
+        // <div>
+        //     HI
+        // </div>
     );
 }
 

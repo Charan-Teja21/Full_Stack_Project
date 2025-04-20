@@ -93,6 +93,10 @@ userApp.get('/fooditem', expressAsyncHandler(async (req, res) => {
 }))
 
 //get specific food items
+userApp.get('/foodite/:title',expressAsyncHandler(async(req,res)=>{
+  const foodItem = await foodcollection.findOne({recipeid:req.params.title})
+  res.send({message:"FoodItem",payload:foodItem})
+}))
 userApp.get('/fooditem/:title',expressAsyncHandler(async(req,res)=>{
   const foodItem = await foodcollection.findOne({title:req.params.title})
   res.send({message:"FoodItem",payload:foodItem})

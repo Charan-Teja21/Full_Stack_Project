@@ -1,24 +1,57 @@
-input:hover,
-select:hover {
-  border: 1px solid black;
-  box-shadow: 1px 1px 3px black;
+.Login {
+    background: linear-gradient(to right, #ff7e5f, #feb47b); /* Gradient background */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #fff; /* White text for better contrast */
 }
 
 .Form {
-  width: 40%;
-  border-radius: 10px;
-  /* box-shadow: 1px 1px 10px black; */
-  /* background-color: rgb(193, 239, 239); */
-  border: 1.7px solid rgb(204, 204, 252)
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: #333; /* Dark text inside the form */
+    width: 100%;
+    max-width: 500px; /* Limit the form width */
+    margin: auto;
 }
 
-label {
-  font-weight: bolder;
+.input-group {
+    position: relative;
 }
 
-.lg {
-  padding-top: 140px;
-  padding-bottom: 0px;
-  margin-bottom: 0px;
-  padding-bottom: 70px;
+.input-group input {
+    padding-left: 40px; /* Add space for the icon */
+}
+
+.input-group .input-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 1.2rem;
+}
+
+.bn {
+    background-color: #007bff;
+    font-weight: bold;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.bn:hover {
+    background-color: #0056b3;
+    color: white;
+    transform: scale(1.05); /* Slightly enlarge the button */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .Form {
+        padding: 20px;
+    }
 }

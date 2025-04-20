@@ -87,7 +87,7 @@ function Cart() {
                     </select>
                   </div>
                   <div className="col-3 text-center">
-                    <button className="btn rounded bg-primary" onClick={() => handleDelete(obj.title)}>Delete</button>
+                  <button type="button" className="btn btn-outline-primary d-block mx-auto" onClick={() => handleDelete(obj.title)}>Delete</button>
                   </div>
                 </div>
                 <div className="text-center">

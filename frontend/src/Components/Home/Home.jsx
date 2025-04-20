@@ -8,11 +8,11 @@ import { FaRegStarHalfStroke } from 'react-icons/fa6';
 function Home() {
   let navigate = useNavigate();
   let [recipes, setRecipes] = useState([]);
-  let title = "Tandoori Chicken";
+  let title = "3111130718";
   let [recipeObj, setRecipeObj] = useState({});
 
   async function getSpecialItem() {
-    let res = await axios.get(`http://localhost:3500/fooditem/${title}`);
+    let res = await axios.get(`http://localhost:3500/foodite/${title}`);
     setRecipeObj(res.data.payload);
   }
 

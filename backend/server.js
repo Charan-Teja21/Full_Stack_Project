@@ -32,8 +32,6 @@
       .catch(err => {
         console.log("Error in connection", err);
       })
-
-
     //import api routes
     const userApp = require("./APIs/user-api")
 

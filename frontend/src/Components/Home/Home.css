@@ -1,8 +1,14 @@
 .cardImg {
     border: none;
     height: 210px;
+    display: flex;
+    justify-content: center;
+    /* display: block; */
   }
-  
+  .img{
+    justify-content: center;
+    align-items: center;
+  }
   .product_image {
     height: 210px;
     width: fit-content;
