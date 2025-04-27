@@ -6,7 +6,10 @@ dist/
 build/
 
 # # Environment variables
-.env
+frontend/.env
+frontend/.env.local
+backend/.env
+backend/.env.local
 
 # Logs
 *.log
