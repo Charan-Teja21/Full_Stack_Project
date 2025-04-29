@@ -1,6 +1,7 @@
     //create express modules
     const exp = require("express");
     const app = exp()
+    const cors = require("cors");
     const path = require("path")
     require('dotenv').config()
 
@@ -9,7 +10,11 @@
 
     //import mongoclient
     const mongoClient = require("mongodb").MongoClient;
-
+    app.use(cors({
+      origin: ["http://localhost:3500"],
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      credentials: true
+    }))
     //body parser middleware
     app.use(exp.json());
 
